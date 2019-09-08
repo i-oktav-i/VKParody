@@ -3,80 +3,73 @@
         .audioPlayer__wrapper
             .audioPlayer__content
                 .audioPlayer__prevButton(@click="prevAudio()")
-                .audioPlayer__playButton(@click="togglePlayAudio()")
+                .audioPlayer__playButton(:class="{play : getIsPlaying}" @click="togglePlayAudio()")
                 .audioPlayer__nextButton(@click="nextAudio()")
-                p.audioPlayer__currentAudio(ref="curAud") {{ getCurentAudioAuthor + " - " + getCurentAudioTitle }}
-                audio(ref="player", :src="getCurentAudioSrc")
+                p.audioPlayer__currentAudio(ref="curAud") {{ getPlayList[getCurrentTrackId].author + " - " + getPlayList[getCurrentTrackId].title }}
+                audio(ref="player", :src="getPlayList[getCurrentTrackId].src")
             play-list.playList(v-show="false || showPlayList", ref="playList")
 </template>
 
 <script>
+
+import {mapActions, mapGetters} from 'vuex';
 
 import playList from "./PlayList.vue";
 
 export default {
     data() {
         return {
-            isPlay: false,
             showPlayList: false,
             test: this.$store.state.currentAudio,
         }
-    },
-    watch: {
-        test: () => console.log(44),
     },
     components: {
         playList,
     },
     methods: {
-        getCurentAudio() {
-            return this.$store.state.music[this.$store.state.currentAudio];
-        },
+        ...mapActions([
+            'setCurrentTrack',
+            'setPlayList',
+            'setIsPlaying',
+        ]),
         startPlay() {
             this.$refs.player.play().then(
                     res => {
-                        console.log(res);
-                        this.isPlay = true;
+                        this.setIsPlaying(true);
                     },
                     err => {
-                        console.log(err);
                         this.nextAudio();
                     }
                 );
         },
         stopPlay() {
             this.$refs.player.pause();
-            this.isPlay = false;
+            this.setIsPlaying(false);
         },
         nextAudio() {
-            if(this.$store.state.currentAudio < this.$store.state.music.length - 1) {
-                ++this.$store.state.currentAudio;
-                this.$nextTick(() => this.startPlay());
+            if(this.getPlayList.length !== 0) {
+                console.log(this.getCurrentTrackId);
+                this.setCurrentTrack((this.getCurrentTrackId + 1) % this.getPlayList.length);
             }
         },
         prevAudio() {
-            if(this.$store.state.currentAudio > 0) {
-                --this.$store.state.currentAudio;
-                this.$nextTick(() => this.startPlay());
+            if(this.getPlayList.length !== 0) {
+                this.setCurrentTrack((this.getCurrentTrackId - 1 + this.getPlayList.length) % this.getPlayList.length);
             }
         },
         togglePlayAudio() {
-            if(this.isPlay)
+            if(this.getIsPlaying)
                 this.stopPlay();
             else
                 this.startPlay();
         },
     },
     computed: {
-        getCurentAudioSrc() {
-            return this.getCurentAudio().src;
-        },
-        getCurentAudioTitle() {
-            return this.getCurentAudio().title;
-        },
-        getCurentAudioAuthor() {
-            return this.getCurentAudio().author;
-        },
+        ...mapGetters([
+            'getCurrentTrackId',
+            'getPlayList',
+            'getIsPlaying',
+        ])
     },
     created() {
         document.addEventListener("click", (e) => {
@@ -87,12 +80,30 @@ export default {
             else
                 this.showPlayList = false;
         });
-        this.player = new Audio("https://uzimusic.ru/mp3/2949641/Burak_Yeter_Feat_Danelle_Sandoval_-_Tuesday(uzimusic.ru).mp3");//(this.getCurentAudio().src);
+        this.setPlayList();
     },
+    watch: {
+        getCurrentTrackId: function() {
+            let oldId = this.getCurrentTrackId; 
+            setTimeout(() => {
+                if(oldId == this.getCurrentTrackId)
+                    this.$nextTick(function() {
+                        this.startPlay();
+                    });
+            }, 450);
+        },
+        getIsPlaying: function() {
+            if(this.getIsPlaying)
+                this.startPlay();
+            else
+                this.stopPlay();
+        },
+    }
 }
 </script>
 
 <style lang="less" scoped>
+
 @import url("../../less/smart-grid.less");
 
 .audioPlayer {
@@ -125,6 +136,9 @@ export default {
     }
     &__playButton {
         background-image: url("../../assets/audioPlayerImages/playButton.svg");
+        &.play {
+            background-image: url("../../assets/audioPlayerImages/pauseButton.svg");
+        }
     }
     p {
         color: #fff;

@@ -1,9 +1,10 @@
 <template lang="pug">
     .playList
         ul.list
-            li.composition(v-for="(item, index) in getList()", key="item.src", @click="onCompositionClick(index)")
+            li.composition(v-for="(item, index) in getPlayList", key="item.src", @click="onCompositionClick(index)")
                 .wrap
-                    .pic
+                    .pic(:class="getClass(index)", ref="sss")
+                    //- .pic(:class='')
                     .name
                         p.title {{ item.title }}
                         p.author {{ item.author }}
@@ -11,21 +12,40 @@
 </template>
 
 <script>
+import {mapGetters, mapActions} from 'vuex';
+
 export default {
     data() {
         return {
-            
+
         }
     },
     methods: {
-        getList() {
-            return this.$store.state.music;
-        },
+        ...mapActions([
+            'setCurrentTrack',
+            'setIsPlaying',
+        ]),
         onCompositionClick(index) {
-            this.$store.state.currentAudio = index;
-            // console.log(this.$event)
+            if(this.getCurrentTrackId == index)
+                this.setIsPlaying(!this.getIsPlaying);
+            else
+                this.setCurrentTrack(index);
+        },
+        getClass(index) {
+            if(index == this.getCurrentTrackId)
+                if(this.getIsPlaying)
+                    return "playing";
+                else
+                    return "stopped";
         }
-    }
+    },
+    computed: {
+        ...mapGetters([
+            'getPlayList',
+            'getCurrentTrackId',
+            'getIsPlaying',
+        ]),
+    },
 }
 </script>
 
@@ -46,6 +66,24 @@ export default {
     height: 50px;
     background-color: #f00;
     margin-right: 20px;
+    position: relative;
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-size: cover;
+        opacity: 0.5;
+    }
+
+    &.playing::after {
+        background-image: url('../../assets/audioPlayerImages/pauseButton.svg');
+    }
+    &.stopped::after {
+        background-image: url('../../assets/audioPlayerImages/playButton.svg');
+    }
 }
 .wrap {
     display: flex;
@@ -53,8 +91,6 @@ export default {
     width: 500px;
     height: 50px;
     margin-bottom: 5px;
-    // border-bottom: 1px solid #888;
-    // border-top: 1px solid #888;
     padding: 10px 5px;
     &:hover {
         background-color: #82d4df;
