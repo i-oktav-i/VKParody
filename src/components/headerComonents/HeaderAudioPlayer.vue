@@ -144,6 +144,7 @@ export default {
         color: #fff;
         opacity: 0.5;
         width: 300px;
+        line-height: 40px;
         overflow: hidden;
     }
 }

@@ -2,7 +2,8 @@
     .menu
         ul
             li(class="menuItem" v-for="(link, i) in links" :key="i")
-                a(:href="link.src") {{link.name}}
+                router-link(:to="link.src") {{link.name}}
+                //- a(:href="link.src") {{link.name}}
 </template>
 
 <script>
@@ -10,7 +11,7 @@ export default {
     data() {
         return {
             links: [
-                {name: "You Profile", src: "#"},
+                {name: "You Profile", src: "/my_page"},
                 {name: "Settings", src: "#"},
                 {name: "Help", src: "#"},
                 {name: "Info", src: "#"},

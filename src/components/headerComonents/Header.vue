@@ -36,7 +36,10 @@ export default {
 	height: 40px;
 	background-color: #267ec5;
 	&__wrapper {
-		.wrapper();
+		max-width: 1170px;
+		min-width: 1170px;
+		margin-left: auto;
+		margin-right: auto;
 	}
 
 	&__content {
@@ -45,6 +48,7 @@ export default {
 		align-items: center;
 		height: 40px;
 		justify-content: space-between;
+		background-color: #267ec5;
 	}
 
 	&__serchInput {
@@ -74,6 +78,7 @@ export default {
 	&__logo {
 		background-image: url("../../assets/vkHeaderImages/vkLogo.svg");
 		margin-right: 50px;
+		margin-left: 30px;
 	}
 
 	&__notification {

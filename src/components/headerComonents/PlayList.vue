@@ -51,6 +51,10 @@ export default {
 
 <style lang="less" scoped>
 
+.playList {
+    background-color: #fff;
+}
+
 .title {
     color: #000;
 }
