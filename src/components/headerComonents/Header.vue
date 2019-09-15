@@ -7,10 +7,10 @@
 				<div class="vkHeader__serch">
 					<input type="text" class="vkHeader__serchInput" placeholder="поиск">
 				</div>
-				<div class="vkHeader__notification">
+				<div class="vkHeader__notification" v-if="isAuthed">
 				</div>
-				<audio-player class="audioPlayer"></audio-player>
-				<userInfo></userInfo>
+				<audio-player class="audioPlayer" v-if="isAuthed"></audio-player>
+				<userInfo v-if="isAuthed"></userInfo>
 			</div>
 		</div>
 	</div>
@@ -20,11 +20,18 @@
 
 import audioPlayer from "./HeaderAudioPlayer.vue"
 import userInfo from "./headerUserInfo"
+import {mapGetters} from 'vuex'
+
 
 export default {
 	components: {
 		audioPlayer,
 		userInfo,
+	},
+	computed: {
+		...mapGetters([
+			'isAuthed',
+		]),
 	}
 }
 </script>
@@ -47,7 +54,7 @@ export default {
 		// justify-content: space-between;
 		align-items: center;
 		height: 40px;
-		justify-content: space-between;
+		// justify-content: space-between;
 		background-color: #267ec5;
 	}
 
@@ -63,6 +70,7 @@ export default {
 		box-shadow: none;
 		padding-left: 10px;
 		margin-right: 50px;
+		margin-left: auto;
 		&:focus {
 			background-color: #fff;
 		}
@@ -73,6 +81,7 @@ export default {
 		height: 40px;
 		background-size: cover;
 		background-repeat: no-repeat;
+		// margin-right: auto;
 	}
 
 	&__logo {

@@ -30,9 +30,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.news{
-    width: 100%;
-}
+
+
 
 .post {
     background-color: #fff;
