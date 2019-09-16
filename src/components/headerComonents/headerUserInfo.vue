@@ -1,23 +1,29 @@
 <template lang="pug">
     .profil
-        p.userName {{ name }}
+        p.userName {{ getUserFirstName }}
         .userPhoto
-            img(:src="userPhoto", alt="That's U" class="icon")
+            img(:src="getUserPhotoXs", alt="That's U" class="icon")
         .toggleMenuButton.close(ref="showBtn")
         header-menu(class="menu" v-show="showMenu")
 </template>
 
 <script>
 
+import {mapGetters} from 'vuex';
+
 import headerMenu from './vkHeaderMenu.vue';
 
 export default {
     data() {
         return {
-            name: "Андрей",
-            userPhoto: "https://sun1-15.userapi.com/c850624/v850624040/60344/yP-pvAYCCB0.jpg?ava=1",
             showMenu: false,
         }
+    },
+    computed: {
+        ...mapGetters([
+            'getUserPhotoXs',
+            'getUserFirstName',
+        ])
     },
     methods: {
         onClickAway() {

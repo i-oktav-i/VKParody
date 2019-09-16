@@ -16,14 +16,12 @@ Vue.prototype.$jsonp = function(url, onSuccess, onError) {
   while(callbackReg[cbName] !== undefined)
     cbName = 'cb' + String(Math.random()).slice(-6);
 
-  console.log(cbName);
   let scUrl = url;
   scUrl += url.indexOf['?'] == -1 ? '?' : '&';
   scUrl += 'callback=window.callbackReg.' + cbName;
 
   let successFlag = false;
   callbackReg[cbName] = function(data) {
-    console.log('qqqqqqqqqqqq');
     successFlag = true;
     delete callbackReg[cbName];
     onSuccess(data);
@@ -32,7 +30,7 @@ Vue.prototype.$jsonp = function(url, onSuccess, onError) {
   function checkCallback() {
     if(successFlag)
       return;
-    // delete callbackReg[cbName];
+    delete callbackReg[cbName];
     onError(scUrl);
   }
 
