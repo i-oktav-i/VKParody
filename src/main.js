@@ -4,7 +4,6 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from "./store"
-// import axios from 'axios'
 
 Vue.config.productionTip = false
 
@@ -29,7 +28,6 @@ Vue.prototype.$jsonp = function(url, onSuccess, onError) {
 
   function checkCallback() {
     this.remove();
-    // console.log('cdcd', this);
     if(successFlag)
       return;
     delete callbackReg[cbName];

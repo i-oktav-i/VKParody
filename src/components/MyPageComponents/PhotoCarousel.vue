@@ -1,8 +1,9 @@
 <template lang="pug">
-    .photoCarousel(ref='phBur')
-        ul(ref='ul' class='userPhotosBur')
-            li(class='photos' v-for="item in userPhotos.reverse()" :key="item.id")
-                img(:src='item.photo_604')
+    .photoCarousel
+        .photoWrap(ref='phBur')
+            ul(ref='ul' class='userPhotosBur')
+                li(class='photos' v-for="item in userPhotos.reverse()" :key="item.id")
+                    img(:src='item.photo_604')
 </template>
 
 
@@ -45,7 +46,6 @@ export default {
             this.$jsonp(`https://api.vk.com/method/photos.get?access_token=${this.getToken}&album_id=profile&v=5.52`, 
             res => {
                 this.userPhotos = res.response.items;
-                console.log(res);
             },
             function(url) {
                 console.log(url);
@@ -79,7 +79,11 @@ export default {
 
 <style lang="less" scoped>
 .photoCarousel {
-    height: 110px;
+    padding: 15px;
+    background-color: #fff;
+}
+.photoWrap {
+    height: 100px;
     width: 100%;
     position: relative;
     overflow: hidden;
@@ -97,7 +101,7 @@ export default {
 
 .userPhotosBur {
     position: absolute;
-    top: 5px;
+    top: 0px;
     left: 0px;
     white-space: nowrap;
     height: 100px;
@@ -105,6 +109,15 @@ export default {
 .photos {
     display: inline-block;
     margin-right: 5px;
+    position: relative;
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
     img {
         height: 100px;
     }

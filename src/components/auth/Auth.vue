@@ -12,24 +12,8 @@ import axios from 'axios';
 export default {
     data() {
         return {
-            userName: "",
-            pass: "",
         }
     },
-    methods: {
-        submit() {
-            // let url = 'https://oauth.vk.com/token?grant_type=password&client_id=3697615&client_secret=AlVXZFMUqyrnABp8ncuU&username=&password=&v=5.52&2fa_supported=1&format=json';
-            let url = "";
-            this.$jsonp(url,
-            function(data) {
-                console.log(data);
-            },
-            function(url) {
-                console.log('error', url);
-            });
-            
-        }
-    }
 }
 
 </script>

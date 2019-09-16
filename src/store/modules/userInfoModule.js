@@ -13,17 +13,14 @@ export default {
         getUserFirstName: state => state.userInfo.first_name,
         getUserPhotoXs: state => state.userInfo.photo_50,
         isAuthed: state => state.token !== '',
+        getAllUserInfo: state => state.userInfo,
     },
     mutations: {
         setToken: (state, newToken) => state.token = newToken,
-        // setUserId: (state, newId) => state.userId = newId,
-        // setUserPhotoXs: (state, src) => state.userPhotoXs = src,
         setUserInfo: (state, newInfo) => state.userInfo = newInfo,
     },
     actions: {
         setToken: ({commit}, newToken) => commit('setToken', newToken),
-        // setUserIdks: ({commit}, newId) => commit('setUserId', newId),
-        // setUserPhotoXs: ({commit}, src) => commit('setUserPhotoXs', src),
         setUserInfo: ({commit}, newInfo) => commit('setUserInfo', newInfo),
     },
 }
