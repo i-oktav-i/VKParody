@@ -1,10 +1,5 @@
 <template lang="pug">
-    .auth 
-        //- form.authForm
-        //-     .wrap
-        //-         input.userName(type="text" v-model="userName" placeholder="e-mail or phone")
-        //-         input.pass(type="text" v-model="pass" placeholder="password")
-        //-         button.login(type='submit' @click.prevent="submit") Submit
+    .auth
         .wrap
             p(class='greet') U need to authorize
             a(:href='this.$store.getters.getAuthUrl' class='authUrl') Authorize

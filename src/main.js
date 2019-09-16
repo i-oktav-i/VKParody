@@ -28,6 +28,8 @@ Vue.prototype.$jsonp = function(url, onSuccess, onError) {
   }
 
   function checkCallback() {
+    this.remove();
+    // console.log('cdcd', this);
     if(successFlag)
       return;
     delete callbackReg[cbName];
@@ -42,7 +44,7 @@ Vue.prototype.$jsonp = function(url, onSuccess, onError) {
       setTimeout(checkCallback, 0);
     }
   }
-  script.onloadc = script.onerror = checkCallback;
+  script.onload = script.onerror = checkCallback;
   script.src = scUrl;
 
   document.body.appendChild(script);

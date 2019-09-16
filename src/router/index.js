@@ -6,7 +6,7 @@ Vue.use(Router)
 import News from "../components/News.vue";
 import Messages from "../components/messagesComponents/Messages.vue";
 import Conversation from "../components/messagesComponents/Conversation.vue";
-import MyPage from "../components/MyPage.vue";
+import MyPage from "../components/MyPageComponents/MyPage.vue";
 import Friends from "../components/Friends.vue";
 import Photos from "../components/Photos.vue";
 import Music from "../components/Music.vue";
