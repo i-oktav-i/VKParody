@@ -10,13 +10,14 @@
                 p.pInfo.bday(v-if="getAllUserInfo.bdate !== undefined") день рождения: {{getAllUserInfo.bdate}}
                 p.pInfo.city(v-if="getAllUserInfo.city.title !== undefined") город: {{getAllUserInfo.city.title}}
                 p.pInfo.university(v-if="getAllUserInfo.universities[0].name !== undefined") ВУЗ: {{getAllUserInfo.universities[0].name}}
-            .carousel
-                photoCarousel
+            photoCarousel.carousel
+            posts.wallPosts
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
 import photoCarousel from './PhotoCarousel.vue'
+import posts from './MyPosts.vue'
 
 export default {
     data() {
@@ -25,6 +26,7 @@ export default {
     },
     components: {
         photoCarousel,
+        posts,
     },
     computed: {
         ...mapGetters([
@@ -33,17 +35,22 @@ export default {
         ])
     },
     methods: {
-    }
+    },
+    mounted() {
+        if(this.getToken === '')
+            this.$router.push('/Auth');
+    },
 }
 </script>
 
 <style lang="less" scoped>
 .myPage {
-    width: 100%;
+    // width: 100%;
     display: flex;
 }
 
 .rightCol {
+    width: 600px;
     .shortInfo {
         background-color: #fff;
         border-radius: 10px;
@@ -57,20 +64,29 @@ export default {
             margin-top: 5px;
         }
     }
+    .carousel {
+        // width: 700px;
+        border-radius: 15px;
+    }
+    // .wallPosts {
+
+    // }
 }
 
 .leftCol {
 
     margin-right: 15px;
+    // width: 400px;
 
     .userAvatar {
+        box-sizing: border-box;
         padding: 15px;
         background-color: #fff;
         border-radius: 10px;
     }
 }
 
-.carousel {
-    width: 700px;
+.test {
+    word-wrap: break-word;
 }
 </style>

@@ -1,8 +1,9 @@
 <template lang="pug">
     .photoCarousel
+        //- button.refresh(v-if="requestErr" @click.prevent="getPhotos()") refresh
         .photoWrap(ref='phBur')
             ul(ref='ul' class='userPhotosBur')
-                li(class='photos' v-for="item in userPhotos.reverse()" :key="item.id")
+                li(class="photos" v-for="item in userPhotos.reverse()" :key="item.id")
                     img(:src='item.photo_604')
 </template>
 
@@ -17,6 +18,7 @@ export default {
             userPhotos: [],
             isMouseDown: false,
             posPhotos: 0,
+            requestErr: false,
         }
     },
     computed: {
@@ -38,28 +40,29 @@ export default {
                 this.$refs.ul.style.left = this.posPhotos + 'px';
             }
         },
-    },
-    mounted() {
-        if(this.getToken === '')
-            this.$router.push('/Auth');
-        else {
-            this.$jsonp(`https://api.vk.com/method/photos.get?access_token=${this.getToken}&album_id=profile&v=5.52`, 
-            res => {
+        getPhotos() {
+            this.$jsonp(`https://api.vk.com/method/photos.get?access_token=${this.getToken}&album_id=profile&v=5.52`)
+            .then(res => {
                 this.userPhotos = res.response.items;
-            },
-            function(url) {
-                console.log(url);
-            });
-
+                this.requestErr = false;
+                return this.$nextTick()
+            })
+            .then(this.setElem())
+            .catch(this.requestErr = true);
+        },
+        setElem() {       
+           /*  console.log(this.$refs.phBur);
+            console.log(this.$refs.ul); */
             let mousPos = 0;
-
             this.$refs.phBur.onmousedown = (e) => {            
+                // console.log('down');
                 this.$refs.ul.style.transition = '';
                 mousPos = e.clientX;
                 this.isMouseDown = true;
             };
 
             this.$refs.phBur.onmousemove = (e) => {
+                // console.log('move');
                 if(this.isMouseDown) {
                         this.posPhotos += e.clientX - mousPos;
                         this.$refs.ul.style.left = this.posPhotos + 'px';
@@ -67,12 +70,16 @@ export default {
                 }
             };
             this.$refs.phBur.onmouseup = this.$refs.phBur.onmouseout = (e) => {
+                // console.log('up/out');
                 if(this.isMouseDown) {
                     this.isMouseDown = false;
                     this.checkPhotosPos();
                 }
             }
         }
+    },
+    mounted() {
+        this.getPhotos();
     }
 }
 </script>
@@ -81,6 +88,15 @@ export default {
 .photoCarousel {
     padding: 15px;
     background-color: #fff;
+    text-align: center;
+    // display: flex;
+    // justify-content: space-around;
+    // align-items: center;
+}
+.refresh {
+    margin: auto;
+    width: 300px;
+    height: 50px;
 }
 .photoWrap {
     height: 100px;
